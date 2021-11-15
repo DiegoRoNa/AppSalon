@@ -1,0 +1,19 @@
+{
+    "name": "diegorojasnava/app-salon",
+    "description": "Proyecto PHP 8, MVC, GULP, ACTIVERECORD, SASS",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Diego Rojas Nava",
+            "email": "diegorn.10@hotmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Model\\": "./models",
+            "MVC\\": "./",
+            "Controllers\\": "./controllers"
+        }
+    }
+}
