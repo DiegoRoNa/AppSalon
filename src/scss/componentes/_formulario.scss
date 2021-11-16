@@ -1,6 +1,8 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
+// ESTILOS DE LOS FORMULARIOS
+
 .formulario{
     width: 100%;
     margin-top: 5rem;
@@ -20,5 +22,11 @@
         border: none;
         padding: calc(v.$separacion/4);
         border-radius: 1rem;
+
+        &:disabled{
+            background-color: lighten(v.$negro, 30%);
+            color: v.$blanco;
+            cursor: not-allowed;
+        }
     }
 }

@@ -1,6 +1,8 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
+//ESTILOS GENERALES DE TODA LA APP
+
 .contenedor-app{
     @include m.tablet {
         display: grid;

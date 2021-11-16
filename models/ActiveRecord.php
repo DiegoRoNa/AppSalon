@@ -15,6 +15,7 @@ class ActiveRecord {
         self::$db = $database;
     }
 
+    // Crear una alerta
     public static function setAlerta($tipo, $mensaje) {
         static::$alertas[$tipo][] = $mensaje;
     }
@@ -121,6 +122,13 @@ class ActiveRecord {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT ${limite}";
         $resultado = self::consultarSQL($query);
         return array_shift( $resultado ) ;
+    }
+
+    // Busca un registro por el token
+    public static function where($columna, $valor) {
+        $query = "SELECT * FROM " . static::$tabla  ." WHERE ${columna} = '${valor}'";
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado );
     }
 
     // crea un nuevo registro

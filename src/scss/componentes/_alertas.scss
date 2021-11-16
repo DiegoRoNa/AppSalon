@@ -1,6 +1,8 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
+// ESTILOS DE LAS ALERTAS O ERRORES
+
 .alerta{
     padding: calc(v.$separacion/4);
     color: v.$blanco;

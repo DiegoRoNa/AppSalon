@@ -62,6 +62,44 @@ class Usuario extends ActiveRecord{
     }
 
 
+    //VALIDAR EL FORMULARIO DE LOGIN
+    public function validarLogin(){
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El correo es obligatorio';
+        }
+
+        if (!$this->password) {
+            self::$alertas['error'][] = 'La contraseña es obligatoria';
+        }
+
+        return self::$alertas;
+    }
+
+
+    //VALIDAR EL FORMULARIO DE PASSWORD OLVIDADO 
+    public function validarEmail(){
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El correo es obligatorio';
+        }
+
+        return self::$alertas;
+    }
+
+
+    //VALIDAR EL FORMULARIO DEL NUEVO PASSWORD
+    public function validarPassword(){
+        if (!$this->password) {
+            self::$alertas['error'][] = 'La contraseña es obligatoria';
+        }
+
+        if (strlen($this->password) < 6) {
+            self::$alertas['error'][] = 'La contraseña debe tener mínimo 6 caracteres';
+        }
+
+        return self::$alertas;
+    }
+
+
     //CONSULTAR SI EL USUARIO EXISTE
     public function existeUsuario(){
         //consulta
@@ -90,4 +128,20 @@ class Usuario extends ActiveRecord{
     public function crearToken(){
         $this->token = uniqid();
     }
+
+
+    //VERIFICAR QUE LA CONTRASEÑA EXISTE Y ESTE CONFIRMADO EL USUARIO
+    public function comprobarPasswordAndVerficiado($password){
+        $resultado = password_verify($password, $this->password);//comparar password
+
+        //verificar la confirmacion
+        if (!$resultado || !$this->confirmado) {
+            self::$alertas['error'][] = 'Contraseña incorrecta o tu cuenta no ha sido confirmada';
+        }else {
+            return true;
+        }
+    }
+
+
+    
 }

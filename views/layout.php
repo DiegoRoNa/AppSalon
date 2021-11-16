@@ -15,6 +15,9 @@
             <?php echo $contenido; ?>
         </div>
     </div>
-            
+
+    <!--VARIABLE PARA CARGAR JS EN ALGUNAS PAGINAS-->
+    <?php echo $script ?? '';?>
+    
 </body>
 </html>

@@ -1,0 +1,22 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+//ESTILOS DE LA PAGINA /cita
+
+.seccion{
+
+    padding: 5rem 0;
+    display: none;
+
+    .text-center{
+        text-align: center;
+    }
+}
+
+.mostrar{
+    display: block;
+}
+
+.ocultar{
+    display: none;
+}
