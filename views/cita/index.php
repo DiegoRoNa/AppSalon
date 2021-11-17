@@ -12,7 +12,7 @@
     <div id="paso-1" class="seccion">
         <h2>Servicios</h2>
         <p class="text-center">Elige tus servicios a continuación</p>
-        <div id="servicios" class="listado-servicios"></div>
+        <div id="servicios" class="listado-servicios"></div><!--Contenedor de servicios-->
     </div>
     <div id="paso-2" class="seccion">
         <h2>Tus datos y cita</h2>
@@ -26,12 +26,12 @@
 
             <div class="campo">
                 <label for="fecha">Fecha</label>
-                <input type="date" name="fecha" id="fecha">
+                <input type="date" name="fecha" id="fecha" min="<?=date('Y-m-d', strtotime('+1 day'));?>">
             </div>
-
+            
             <div class="campo">
                 <label for="hora">Hora</label>
-                <input type="time" name="hora" id="hora">
+                <input type="time" name="hora" id="hora" min="09:00" max="21:00">
             </div>
         </form>
     </div>
