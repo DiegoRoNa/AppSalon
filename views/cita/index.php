@@ -31,11 +31,13 @@
             
             <div class="campo">
                 <label for="hora">Hora</label>
-                <input type="time" name="hora" id="hora" min="09:00" max="21:00">
+                <input type="time" name="hora" id="hora">
             </div>
+
+            <input type="hidden" id="id" name="id" value="<?=$id;?>">
         </form>
     </div>
-    <div id="paso-3" class="seccion">
+    <div id="paso-3" class="seccion contenido-resumen">
         <h2>Resumen</h2>
         <p class="text-center">Verifica que la información sea correcta</p>
     </div>
@@ -47,5 +49,9 @@
 </div>
 
 <!--CARGAR JS-->
-<?php $script = "<script src='build/js/app.js'></script>"; ?>
+<?php $script = "
+        <script src='//cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <script src='build/js/app.js'></script>
+    "; 
+?>
 

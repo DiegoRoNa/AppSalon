@@ -8,9 +8,12 @@ class CitaController{
     public static function index(Router $router){
 
         //YA HAY UNA SESION INICIADA DESDE Router.php
+        $id = $_SESSION['id']; //este id lo mandamos para recogerlo desde JS para la tabla citas
+        $nombre = $_SESSION['nombre'];
 
         $router->render('cita/index', [
-            'nombre' => $_SESSION['nombre']
+            'id' => $id,
+            'nombre' => $nombre
         ]);
     }
 }

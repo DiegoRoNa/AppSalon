@@ -3,6 +3,7 @@ const pasoInicial = 1;
 const pasoFinal = 3;
 
 const cita = {
+    id: '',
     nombre: '',
     fecha: '',
     hora: '',
@@ -23,8 +24,11 @@ function iniciarApp(){
 
     consultarAPI(); //CONSULTA LA API EN EL BACKEND DE PHP
 
+    idCliente(); //TRAE EL ID DEL USUARIO AUTENTICADO A CITA
     nombreCliente(); //TRAE EL NOMBRE DEL USUARIO AUTENTICADO A CITA
-    seleccionarFecha(); //TRAE LA FECHA EN CITA
+    seleccionarFecha(); //TRAE LA FECHA DE LA CITA
+    seleccionarHora(); //TRAE LA HORA DE LA CITA
+    mostrarResumen(); //MOSTRAR EL ARREGLO cita LLENO EN LA SECCION resumen
 
 }
 
@@ -72,12 +76,14 @@ function botonesPaginador(){
     const paginaAnterior = document.querySelector('#anterior');
     const paginaSiguiente = document.querySelector('#siguiente');
 
-    if (paso === 1) {
+    if (paso === 1) { //Pagina 1 (SERVICIOS)
         paginaAnterior.classList.add('ocultar');
         paginaSiguiente.classList.remove('ocultar');
-    }else if(paso === 3){
+    }else if(paso === 3){ //Pagina 3 (RESUMEN)
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.add('ocultar');
+
+        mostrarResumen();
     }else{
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.remove('ocultar');
@@ -202,9 +208,13 @@ function seleccionaServicio(servicio){
         divServicio.classList.add('seleccionado');
     }
 
-    console.log(cita);
 }
 
+//agregar el id del usuario a cita
+function idCliente(){
+    //atributo value="" del input nombre
+    cita.id = document.querySelector('#id').value;
+}
 
 //agregar el nombre del usuario a cita
 function nombreCliente(){
@@ -227,7 +237,7 @@ function seleccionarFecha(){
             e.target.value = '';//vaciamos el input DATE
 
             //mostramos una alerta para sabados y domingos
-            mostrarAlerta('Fines de semana no trabajamos', 'error');
+            mostrarAlerta('Fines de semana no trabajamos', 'error', '#paso-2 p');
         }else{
             cita.fecha = e.target.value;
         }
@@ -235,11 +245,30 @@ function seleccionarFecha(){
     });
 }
 
-function mostrarAlerta(mensaje, tipo){
+function seleccionarHora(){
+    const inputHora = document.querySelector('#hora');
+    inputHora.addEventListener('input', function(e){
+        
+        const horaCita = e.target.value;
+        const hora = horaCita.split(":")[0];
+        
+        if (hora < 8 || hora >= 21) {
+            mostrarAlerta('En esa hora no está abierto', 'error', '#paso-2 p');
+        }else{
+            cita.hora = e.target.value;
+
+        }
+        
+    });
+}
+
+function mostrarAlerta(mensaje, tipo, elemento, desaparece = true){
 
     //VERIFICAR SI YA ESTA LA ALERTA
     const alertaPrevia = document.querySelector('.alerta');
-    if (alertaPrevia) return;
+    if (alertaPrevia){
+        alertaPrevia.remove();
+    };
 
     //SI NO ESTÁ, LA CREAMOS CON SCRIPTING
     const alerta = document.createElement('DIV');
@@ -247,11 +276,167 @@ function mostrarAlerta(mensaje, tipo){
     alerta.classList.add('alerta');
     alerta.classList.add(tipo);
 
-    const formulario = document.querySelector('#paso-2 p');
-    formulario.appendChild(alerta);
+    const referencia = document.querySelector(elemento);
+    referencia.appendChild(alerta);
 
-    //QUITAR LA ALERTA 3 SEGUNDOS DESPUES
-    setTimeout( () => {
-        alerta.remove();
-    }, 3000);
+    if (desaparece) {
+        //QUITAR LA ALERTA 3 SEGUNDOS DESPUES
+        setTimeout( () => {
+            alerta.remove();
+        }, 3000);   
+    }
+}
+
+
+//RESUMEN DE LA CITA
+function mostrarResumen(){
+    const resumen = document.querySelector('.contenido-resumen');
+
+    //LIMPIAR EL CONTENIDO DEL RESUMEN
+    while(resumen.firstChild){ //Mientras exista algo en el div resumen, elimarlo
+        resumen.removeChild(resumen.firstChild);
+    }
+
+    //EVALUAR SI LOS ELEMENTOS DE cita YA ESTÁN LLENOS
+    if ( Object.values(cita).includes('') || cita.servicios.length === 0 ) {
+        mostrarAlerta('Selecciona un servicio, la fecha y hora', 'error', '.contenido-resumen', false);
+
+        return;
+    }
+
+    //SCRIPTING PARA MOSTRAR EL RESUMEN
+
+    //Formatear elarreglo de cita
+    const { nombre, fecha, hora, servicios } = cita;
+
+    //HEADING DE SERVICIOS
+    const headingServicios = document.createElement('H3');
+    headingServicios.textContent = 'Resumen de tus servicios solicitados';
+    resumen.appendChild(headingServicios);
+
+    //SERVICIOS
+    servicios.forEach(servicio => {//recorrer el array de servicios
+        const { id, precio, nombre } = servicio; //elementos de cada servicio
+        
+        //contenedor
+        const contenedorServicio = document.createElement('DIV');
+        contenedorServicio.classList.add('contenedor-servicio');
+
+        //nombre del servicio
+        const textoServicio = document.createElement('P');
+        textoServicio.textContent = nombre;
+
+        //precio del servicio
+        const precioServicio = document.createElement('P');
+        precioServicio.innerHTML = `<span>Precio: </span>${precio}`;
+
+        contenedorServicio.appendChild(textoServicio);
+        contenedorServicio.appendChild(precioServicio);
+
+        resumen.appendChild(contenedorServicio);
+
+    });
+
+    //HEADING DE INFORMACION DE CITA
+    const headingCita = document.createElement('H3');
+    headingCita.textContent = 'Resumen de la cita';
+    resumen.appendChild(headingCita);
+
+    //NOMBRE DEL USUARIO
+    const nombreCliente = document.createElement('P');
+    nombreCliente.innerHTML = `<span>Nombre: </span>${nombre}`;
+
+    //FORMATEAR LA FECHA PARA MOSTRARLA DE MEJOR MANERA
+    const fechaObj = new Date(fecha);
+    const year = fechaObj.getFullYear();
+    const mes = fechaObj.getMonth();
+    const dia = fechaObj.getDate() + 2;//Al instanciar un nuevo objeto DATE, le resta 1 dia al actual
+
+    const fechaUTC = new Date( Date.UTC(year, mes, dia) );//formato UTC UNIX
+
+    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    const fechaFormateada = fechaUTC.toLocaleDateString('es-MX', opciones);
+
+    //FECHA DE LA CITA
+    const fechaCita = document.createElement('P');
+    fechaCita.innerHTML = `<span>Fecha: </span>${fechaFormateada}`;
+
+    //HORA DE LA CITA
+    const horaCita = document.createElement('P');
+    horaCita.innerHTML = `<span>Hora: </span>${hora} horas`;
+
+    //BOTON PARA CREAR UNA CITA
+    const botonReservar = document.createElement('BUTTON');
+    botonReservar.classList.add('boton');
+    botonReservar.textContent = 'Reservar cita';
+    botonReservar.onclick = reservarCita;
+
+    //AGREGAR AL DIV DE RESUMEN
+    resumen.appendChild(nombreCliente);
+    resumen.appendChild(fechaCita);
+    resumen.appendChild(horaCita);
+    resumen.appendChild(botonReservar);
+}
+
+
+//RESERVAR CITA
+async function reservarCita(){
+    //CONSTRUIR LA PETICION A LA API
+    const { id, fecha, hora, servicios } = cita;
+
+    //HITERAR Y HACER COINCIDENCIAS, ESO HACE MAP
+    const idServicios = servicios.map( servicio => servicio.id );
+
+    //LE MANDAMOS A LA API LO QUE NECESITA PARA LLENAR LA TABLA citas, citasServicios
+    //FormData: es como el submit de un formulario
+    const datos = new FormData();//Arreglo para mandar los datos a la API
+    datos.append('fecha', fecha); //'fecha' = $_POST['fecha'] ... fecha es la variable
+    datos.append('hora', hora);
+    datos.append('idUsuario', id); 
+    datos.append('servicios', idServicios);
+    //console.log([...datos]);
+    //return;
+
+    //PETICION A LA API
+    try {
+        const url = 'http://localhost:3000/api/citas';
+        const respuesta = await fetch(url, {//parametro opcional, pero con POST es obligatorio
+            method: 'POST', //metodo
+            body: datos //datos
+        });
+
+        //MANDAMOS RESULTADO
+        const resultado = await respuesta.json(); 
+
+        //MANDAR MENSAJE DE EXITO
+        if (resultado.resultado) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cita creada',
+                text: 'Has pedido una cita correctamente',
+                button: 'OK'
+            }).then( () => {
+                setTimeout(() => {
+                    window.location.reload();    
+                }, 1500);
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al crear la cita',
+            button: 'OK'
+        }).then( () => {
+            setTimeout(() => {
+                window.location.reload();    
+            }, 1500);
+        });
+    }
+
+    
+    
+
+    
+    
 }
