@@ -6,6 +6,7 @@ class Usuario extends ActiveRecord{
 
     //TABLA DE LA BD
     protected static $tabla = 'usuarios';
+    //MAPEAR LA TABLA PARA ARMAR EL MODELO
     protected static $columnasDB = ['id', 'nombre', 'apellidos', 'email', 'password', 'telefono', 'admin', 'confirmado', 'token'];
     
     //ATRIBUTOS

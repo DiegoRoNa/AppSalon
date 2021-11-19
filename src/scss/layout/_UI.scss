@@ -25,6 +25,25 @@
         width: 95%;
         margin: 0px auto;
         padding: 3rem 0;
+
+        /* ESTILOS DEL SCROLL */
+        &::-webkit-scrollbar{
+            width: 8px;     /* Tamaño del scroll en vertical */
+            height: 8px;    /* Tamaño del scroll en horizontal */
+        }
+        &::-webkit-scrollbar-thumb {
+            background: v.$azul;
+            border-radius: 4px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: v.$gris;
+            box-shadow: v.$negro;
+        }
+        
+        @include m.tablet {
+            overflow-y: scroll;
+               
+        }
     }
 }
 
@@ -40,5 +59,18 @@
     .boton{
         @include m.boton(v.$negro, v.$blanco);
         margin: 0;
+    }
+}
+
+.barra-servicios{
+    margin-bottom: v.$separacion;
+
+    @include m.tablet {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .boton{
+        margin: 0 0 1rem 0;
     }
 }
