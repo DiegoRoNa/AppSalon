@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Model\Cita;
+use Model\CitaServicio;
 use Model\Servicio;
 use MVC\Router;
 
@@ -28,7 +29,28 @@ class APIController{
         //GUARDAMOS LOS DATOS
         $resultado = $cita->guardar();
 
-        //
-        echo json_encode($resultado);
+        //ALMACENAR EN LA TABLA citasServicios
+        //ID de la cita creada
+        $id = $resultado['id'];
+
+        //extraemos los id de los servicios, en un array
+        $idServicios = explode(',', $_POST['servicios']);//lo que llega del frontend
+
+        //recorremos el array, para crear un registro por cada cita o servicio
+        foreach ($idServicios as $idServicio) {
+            $args = [
+                'idCita' => $id,
+                'idServicios' => $idServicio
+            ];
+
+            //INSTANCIAMOS EL MODELO, Y LE PASAMOS LOS DATOS A SU CONTRUCTOR
+            $citaServicio = new CitaServicio($args);
+
+            //ALMACENAMOS EN LA BD
+            $citaServicio->guardar();
+        }
+
+        //RETORNAMOS UNA RESPUESTA
+        echo json_encode(['resultado' => $resultado]);
     }
 }

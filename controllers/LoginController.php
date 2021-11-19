@@ -60,7 +60,13 @@ class LoginController{
 
     //  /logout
     public static function logout(){
-        echo 'Desde logout';
+
+        //YA EXISTE LA SESION INICIADA DESDE Router.php
+
+        //VACIAMOS LA SESSION
+        $_SESSION = [];
+
+        header('Location: /');
     }
 
 
