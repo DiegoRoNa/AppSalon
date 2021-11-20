@@ -1,5 +1,7 @@
 <?php
 
+//CONEXIÓN A LA BASE DE DATOS
+
 $db = mysqli_connect('localhost', 'root', '', 'app_salon');
 
 

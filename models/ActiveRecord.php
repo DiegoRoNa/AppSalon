@@ -3,7 +3,7 @@ namespace Model;
 class ActiveRecord {
 
     // Base DE DATOS
-    protected static $db;
+    protected static $db;//SETEADO DESDE app.php
     protected static $tabla = '';
     protected static $columnasDB = [];
 
@@ -105,6 +105,7 @@ class ActiveRecord {
 
     // Todos los registros
     public static function all() {
+        //static:: HEREDA, BUSCANDO LA PROPIEDA STATIC EN LAS CLASES A HEREDAR
         $query = "SELECT * FROM " . static::$tabla;
         $resultado = self::consultarSQL($query);
         return $resultado;
@@ -114,14 +115,14 @@ class ActiveRecord {
     public static function find($id) {
         $query = "SELECT * FROM " . static::$tabla  ." WHERE id = ${id}";
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return array_shift( $resultado );//toma el primer elemento del arreglo
     }
 
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT ${limite}";
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return array_shift( $resultado );
     }
 
     // Busca un registro por el token
@@ -144,9 +145,9 @@ class ActiveRecord {
 
         // Insertar en la base de datos
         $query = " INSERT INTO " . static::$tabla . " ( ";
-        $query .= join(', ', array_keys($atributos));
+        $query .= join(', ', array_keys($atributos));//JOIN convierte a un string, las llaves del arreglo de atributos
         $query .= " ) VALUES (' "; 
-        $query .= join("', '", array_values($atributos));
+        $query .= join("', '", array_values($atributos));//JOIN convierte a un string, los valores del arreglo de atributos
         $query .= " ') ";
 
         // Resultado de la consulta
