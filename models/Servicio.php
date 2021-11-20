@@ -17,4 +17,20 @@ class Servicio extends ActiveRecord{
         $this->nombre = $args['nombre'] ?? '';
         $this->precio = $args['precio'] ?? '';
     }
+
+
+    //VALIDACION DEL FORMULARIO PARA CREAR Y ACTUALIZAR 
+    public function validar(){
+        if (!$this->nombre) {
+            self::$alertas['error'][] = 'Dale un nombre al servicio';
+        }
+        if (!$this->precio) {
+            self::$alertas['error'][] = 'El servicio debe tener un precio';
+        }
+        if (!is_numeric($this->precio)) {
+            self::$alertas['error'][] = 'El precio no es válido';
+        }
+
+        return self::$alertas;
+    }
 }

@@ -28,8 +28,8 @@
 
         /* ESTILOS DEL SCROLL */
         &::-webkit-scrollbar{
-            width: 8px;     /* Tamaño del scroll en vertical */
-            height: 8px;    /* Tamaño del scroll en horizontal */
+            width: 7px;     /* Tamaño del scroll en vertical */
+            height: 7px;    /* Tamaño del scroll en horizontal */
         }
         &::-webkit-scrollbar-thumb {
             background: v.$azul;
